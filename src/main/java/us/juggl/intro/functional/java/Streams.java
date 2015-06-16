@@ -18,6 +18,13 @@ public class Streams {
     public static void main(String[] args) throws Exception {
         Class.forName("org.postgresql.Driver");
         
+        /*
+         * This format of the database is a single table names "example" with 4 columns:
+         *       id             UUID
+         *       username       VARCHAR(255)
+         *       givenname      VARCHAR(255)
+         *       familyname     VARCHAR(255)
+         */
         
         // Iterate over resultset in Java 8
         try (Connection c = DriverManager.getConnection("jdbc:postgresql://localhost:5432/functional", "dphillips", "password")) {
@@ -32,12 +39,12 @@ public class Streams {
                 
                 // Stream the ResultSet and apply various transformations
                 SQL
-                    .seq(s, toString)
-                    .filter(startsWith.apply("c"))
-                    .sorted()
-                    .skip(2)
-                    .limit(5)
-                    .forEach(System.out::println);
+                    .seq(s, toString)               // Convert the row to a String
+                    .filter(startsWith.apply("c"))  // Filter for strings starting with the letter "c"
+                    .sorted()                       // Sort the list of strings
+                    .skip(2)                        // Skip the first 2 in the list
+                    .limit(5)                       // Allow the next 5 items to continue processing
+                    .forEach(System.out::println);  // Print out the remaining 5 lines
             }
         }
     }
